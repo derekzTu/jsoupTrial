@@ -1,3 +1,5 @@
+//have to compile with jsoup jar
+
 //relevant Java standard library imports
 import java.util.List;
 import java.awt.image.BufferedImage;
@@ -180,12 +182,14 @@ public class imageDownload {
 				googleDownload(images);
 
 				while(num>0){
-					System.out.println("Now downloading from bing");	
-					TimeUnit.SECONDS.sleep(20);
-					getBingUrl(input);
+					List<String> listOfwnids = new LinkedList<>();
+					getImagenetUrl(input);
 					documentParse();
-					parseImages("img");
-					bingDownload(images);
+
+					parseImages("a");
+					imagenetUrlgetId(images,listOfwnids);
+					List<String> downloads = imagenetUrls(listOfwnids);
+					imagenetDownload(downloads);
 				}
 			}
 
