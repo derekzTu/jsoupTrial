@@ -81,8 +81,8 @@ public class imageDownload {
 
 	private static Elements images = null;
 
-	private static String[] websites = {"google","bing","imagenet","a"};
-	private static String manual = "a";
+	//private static String[] websites = {"google","bing","imagenet","a"};
+	//private static String manual = "a";
 
 	private static int count = 0;
 	private static int bingFilter = 150;
@@ -95,6 +95,7 @@ public class imageDownload {
 
 
 		String choice = null;
+		/*
 		Scanner file = new Scanner(System.in);
 		//create the directory
 		createDirectory(file);
@@ -112,8 +113,12 @@ public class imageDownload {
 			manual = file.nextLine();
 
 		}
-
-
+		 */
+		num = Integer.parseInt(args[0]);
+		String manual = args[1];
+		choice = args[2];
+		String input = args[3];
+		/*
 		if(manual.equals("n")){
 			//Choose a website
 			System.out.println("Please enter which website you would like to use from the "
@@ -124,233 +129,255 @@ public class imageDownload {
 			System.out.println();
 			choice = file.nextLine();
 		}
-		while (file.hasNextLine()){
+		 */
+		//	while (file.hasNextLine()){
 
-			System.out.println("Please choose the query term");
-			String input = file.nextLine();
-
-
-			//google only possible 80
-			if(choice.equals("google")){
-
-				TimeUnit.SECONDS.sleep(20);
-				getGoogleUrl(input);
-				System.out.println(agent);
-				documentParse();
-				parseImages("img");
-				googleDownload(images);
+		//	System.out.println("Please choose the query term");
+		//	String input = file.nextLine();
 
 
-			}
-			//bing ~1000
-			//may download duplicates
-			else if(choice.equals("bing")){
-				while(num>0){
-					TimeUnit.SECONDS.sleep(20);
+		//google only possible 80
+		if(choice.equals("google")){
 
-					getBingUrl(input);
-					documentParse();
-
-					parseImages("img");
-					bingDownload(images);
-				}
-
-			}
-
-			else if(choice.equals("imagenet")){
-				while(num>0){
-					List<String> listOfwnids = new LinkedList<>();
-					getImagenetUrl(input);
-					documentParse();
-
-					parseImages("a");
-					imagenetUrlgetId(images,listOfwnids);
-					List<String> downloads = imagenetUrls(listOfwnids);
-					imagenetDownload(downloads);
-
-				}
-			}
-
-			//for volume
-			else{ //automatic
-				System.out.println("Downloading from google");
-				getGoogleUrl(input);
-
-				documentParse();
-
-				parseImages("img");
-				googleDownload(images);
-
-				while(num>0){
-					List<String> listOfwnids = new LinkedList<>();
-					getImagenetUrl(input);
-					documentParse();
-
-					parseImages("a");
-					imagenetUrlgetId(images,listOfwnids);
-					List<String> downloads = imagenetUrls(listOfwnids);
-					imagenetDownload(downloads);
-				}
-			}
-
-			//end of while loops
-		}
-		System.out.println("Done!");
-		file.close();
-		//end of main
-	}
-
-
-	private static  boolean isServerReachable(String url) throws IOException, InterruptedException{
-		Runtime runtime = Runtime.getRuntime();
-		Process proc = runtime.exec("ping " + url); //<- Try ping -c 1 www.serverURL.com
-		int mPingResult = proc.waitFor();
-		if(mPingResult == 0){
-			return true;
-		}else{
-			return false;
-		}
-	}
-
-	private static void imagenetDownload(List<String> downloads) throws IOException, InterruptedException {
-		for(int i=0;i<downloads.size();i++){
-			if(isServerReachable(downloads.get(i))){
-
-				URLConnection imageUrl = new URL(downloads.get(i)).openConnection();
-				System.out.println("agent");
-				imageUrl.addRequestProperty("User-Agent",agent);
-				imageUrl.setRequestProperty("User-Agent",agent);
-
-				imageUrl.connect();
-
-				System.out.println(imageUrl.getInputStream());
-				BufferedImage img = ImageIO.read(imageUrl.getInputStream());
-
-				File outputfile = new File(directoryName+"\\" +imageUrl.hashCode()+".png");
-				String hash = Integer.toString(imageUrl.hashCode());
-
-				if(!(listOfHashcodes.contains(hash))){
-					listOfHashcodes.add(hash);
-					if(img!=null){
-						ImageIO.write(img,"png",outputfile);
-						num--;
-						count++;
-					}
-				}
-			}
-		}
-	}
-
-
-	private static List<String> imagenetUrls(List<String> listOfwnids) throws IOException {
-		List<String> urls = new ArrayList<>();
-		for(int i =0;i<1;i++){
-			url = imageNetUrlList+listOfwnids.get(i);
+			TimeUnit.SECONDS.sleep(20);
+			getGoogleUrl(input);
+			System.out.println(agent);
 			documentParse();
-			String body = doc.body().text();
-			while(body.length()>0){
-				int index = body.indexOf(" ");
-				if(index<0){
-					urls.add(body);
-					body = "";
-				}
-				else{
-					String singleUrl = body.substring(0,index);
-					body = body.substring(index+1);
-					urls.add(singleUrl);
+			parseImages("img");
+			googleDownload(images);
+
+
+		}
+		//bing ~1000
+		//may download duplicates
+		else if(choice.equals("bing")){
+			while(num>0){
+				TimeUnit.SECONDS.sleep(20);
+
+				getBingUrl(input);
+				documentParse();
+
+				parseImages("img");
+				bingDownload(images);
+			}
+
+		}
+
+		else if(choice.equals("imagenet")){
+			while(num>0){
+				List<String> listOfwnids = new LinkedList<>();
+				getImagenetUrl(input);
+				documentParse();
+
+				parseImages("a");
+				imagenetUrlgetId(images,listOfwnids);
+				List<String> downloads = imagenetUrls(listOfwnids);
+				imagenetDownload(downloads);
+
+			}
+		}
+
+		//for volume
+		else{ //automatic
+			System.out.println("Downloading from google");
+			getGoogleUrl(input);
+
+			documentParse();
+
+			parseImages("img");
+			googleDownload(images);
+
+			while(num>0){
+				
+				TimeUnit.SECONDS.sleep(20);
+				List<String> listOfwnids = new LinkedList<>();
+				getImagenetUrl(input);
+				documentParse();
+
+				parseImages("a");
+				imagenetUrlgetId(images,listOfwnids);
+				List<String> downloads = imagenetUrls(listOfwnids);
+				imagenetDownload(downloads);
+			}
+		}
+
+		//end of while loops
+	//}
+	System.out.println("Done!");
+	//file.close();
+	//end of main
+}
+
+
+private static  boolean isServerReachable(String url) throws IOException, InterruptedException{
+	Runtime runtime = Runtime.getRuntime();
+	Process proc = runtime.exec("ping " + url); //<- Try ping -c 1 www.serverURL.com
+	int mPingResult = proc.waitFor();
+	if(mPingResult == 0){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+private static void imagenetDownload(List<String> downloads) throws IOException, InterruptedException {
+	for(int i=0;i<downloads.size();i++){
+		if(isServerReachable(downloads.get(i))){
+
+			URLConnection imageUrl = new URL(downloads.get(i)).openConnection();
+			System.out.println("agent");
+			imageUrl.addRequestProperty("User-Agent",agent);
+			imageUrl.setRequestProperty("User-Agent",agent);
+
+			imageUrl.connect();
+
+			System.out.println(imageUrl.getInputStream());
+			BufferedImage img = ImageIO.read(imageUrl.getInputStream());
+
+			File outputfile = new File(directoryName+"\\" +imageUrl.hashCode()+".png");
+			String hash = Integer.toString(imageUrl.hashCode());
+
+			if(!(listOfHashcodes.contains(hash))){
+				listOfHashcodes.add(hash);
+				if(img!=null){
+					ImageIO.write(img,"png",outputfile);
+					num--;
+					count++;
 				}
 			}
 		}
-		return urls;
 	}
+}
 
 
-	//gets the link
-	private static void imagenetUrlgetId(Elements images2,List<String> ids) {
-		for(Element image:images){	
-			source=image.attr("href");
-			wnid(source,ids);
-		}
-	}
-
-
-	//gets the wnid from the link
-	private static void wnid(String src,List<String>ids) {
-		if(src.contains(wnidCheck)){
-			int index = src.indexOf(wnidCheck);
-			String id = src.substring(index+wnidCheck.length());
-
-			if(!(ids.contains(id))){
-				ids.add(id);
+private static List<String> imagenetUrls(List<String> listOfwnids) throws IOException {
+	List<String> urls = new ArrayList<>();
+	for(int i =0;i<1;i++){
+		url = imageNetUrlList+listOfwnids.get(i);
+		documentParse();
+		String body = doc.body().text();
+		while(body.length()>0){
+			int index = body.indexOf(" ");
+			if(index<0){
+				urls.add(body);
+				body = "";
+			}
+			else{
+				String singleUrl = body.substring(0,index);
+				body = body.substring(index+1);
+				urls.add(singleUrl);
 			}
 		}
 	}
+	return urls;
+}
 
-	private static void documentParse() throws IOException{
-		random = new Random(seed);
-		int rand = random.nextInt(uaNum);
-		addAgents();
-		agent = listOfAgents.get(rand);
-		doc = Jsoup.connect(url).userAgent(agent).timeout(aLongTime).get();
 
+//gets the link
+private static void imagenetUrlgetId(Elements images2,List<String> ids) {
+	for(Element image:images){	
+		source=image.attr("href");
+		wnid(source,ids);
 	}
-	private static void parseImages(String tag){
-
-		images = doc.getElementsByTag(tag);
+}
 
 
+//gets the wnid from the link
+private static void wnid(String src,List<String>ids) {
+	if(src.contains(wnidCheck)){
+		int index = src.indexOf(wnidCheck);
+		String id = src.substring(index+wnidCheck.length());
+
+		if(!(ids.contains(id))){
+			ids.add(id);
+		}
 	}
+}
 
-	private static void addAgents() {
-		//add the agents
-		listOfAgents.add(edge);
-		listOfAgents.add(firefox);
-		listOfAgents.add(mozilla);
-		listOfAgents.add(chrome);
-		listOfAgents.add(chromeplus);
-		listOfAgents.add(galaxy);
-		listOfAgents.add(firebird);
-		listOfAgents.add(AOL);
-		listOfAgents.add(opera);
-		listOfAgents.add(safari);	
+private static void documentParse() throws IOException{
+	random = new Random(seed);
+	int rand = random.nextInt(uaNum);
+	addAgents();
+	agent = listOfAgents.get(rand);
+	doc = Jsoup.connect(url).userAgent(agent).timeout(aLongTime).get();
+
+}
+private static void parseImages(String tag){
+
+	images = doc.getElementsByTag(tag);
 
 
-	}
-	private static void getGoogleUrl(String in) {
-		url = googleUrl+in;
+}
 
-	}
-	private static void getBingUrl(String in){
-		url = bingUrl + in+bingExtension+count;
-	}
+private static void addAgents() {
+	//add the agents
+	listOfAgents.add(edge);
+	listOfAgents.add(firefox);
+	listOfAgents.add(mozilla);
+	listOfAgents.add(chrome);
+	listOfAgents.add(chromeplus);
+	listOfAgents.add(galaxy);
+	listOfAgents.add(firebird);
+	listOfAgents.add(AOL);
+	listOfAgents.add(opera);
+	listOfAgents.add(safari);	
 
-	private static void getImagenetUrl(String in) {
-		url = imagenetUrl + in;
-	}
+
+}
+private static void getGoogleUrl(String in) {
+	url = googleUrl+in;
+
+}
+private static void getBingUrl(String in){
+	url = bingUrl + in+bingExtension+count;
+}
+
+private static void getImagenetUrl(String in) {
+	url = imagenetUrl + in;
+}
 /*
 	private static void getBaiduUrl(String in){
 		url = baiduUrl + in+baiduExtension+count;
 	}
-*/
-	private static void createDirectory(Scanner file) {
-		//creates the directory
+ */
+private static void createDirectory(Scanner file) {
+	//creates the directory
 
 
-		System.out.println("Please specify a directory to save to");
+	System.out.println("Please specify a directory to save to");
 
-		//Constantly loops until a directory is made
-		while(file.hasNextLine()){
+	//Constantly loops until a directory is made
+	while(file.hasNextLine()){
 
-			//the name of the directory as specified by the user
-			directoryName = file.nextLine();
-			//creates it as a file//
-			File directory = new File(directoryName);
-			boolean bool = false;	
+		//the name of the directory as specified by the user
+		directoryName = file.nextLine();
+		//creates it as a file//
+		File directory = new File(directoryName);
+		boolean bool = false;	
 
-			//check to see if directory already exists
-			if(!directory.exists()){
+		//check to see if directory already exists
+		if(!directory.exists()){
 
-				//if directory does not exist create it
+			//if directory does not exist create it
+			try{
+				System.out.println("Directory made");
+				directory.mkdir();
+				bool = true;
+			}
+			catch(SecurityException se){	
+			}
+
+		}
+
+		else{
+			//if the directory exists ask them if they want to overwrite it
+			System.out.println("Directory already exists, overwrite?Y/N");
+
+			String answer = file.nextLine();
+
+
+			if(answer.equals("Y")||answer.equals("y")){
+				//overwrite the directory
 				try{
 					System.out.println("Directory made");
 					directory.mkdir();
@@ -358,105 +385,86 @@ public class imageDownload {
 				}
 				catch(SecurityException se){	
 				}
-
 			}
+		}
+		//break out if directory has been made
+		if(bool) break;
+		//else continue until directory has been made
+		System.out.println("Please specify a directory to save to");
 
+	}
+}
+private static void googleDownload(Elements images) throws IOException {
+	for(Element image:images){
+		if(num>0){
+			//get the url for the image
+			if(agent.equals(chrome)){
+				source = image.attr("abs:data-src");
+			}
 			else{
-				//if the directory exists ask them if they want to overwrite it
-				System.out.println("Directory already exists, overwrite?Y/N");
-
-				String answer = file.nextLine();
-
-
-				if(answer.equals("Y")||answer.equals("y")){
-					//overwrite the directory
-					try{
-						System.out.println("Directory made");
-						directory.mkdir();
-						bool = true;
-					}
-					catch(SecurityException se){	
-					}
-				}
+				source=image.attr("abs:src");
 			}
-			//break out if directory has been made
-			if(bool) break;
-			//else continue until directory has been made
-			System.out.println("Please specify a directory to save to");
+			//download the image
+			if(source.length()>urlLength){
 
+				URL imageUrl = new URL(source);
+
+
+				BufferedImage img = ImageIO.read(imageUrl);
+
+
+				File outputfile = new File(directoryName+"\\" +imageUrl.hashCode()+".png");
+				String hash = Integer.toString(imageUrl.hashCode());
+
+				if(!(listOfHashcodes.contains(hash))){
+
+					listOfHashcodes.add(hash);
+					ImageIO.write(img,"png",outputfile);
+					num--;
+					count++;
+				}
+
+			}
+		}
+		else{
+			break;
 		}
 	}
-	private static void googleDownload(Elements images) throws IOException {
-		for(Element image:images){
-			if(num>0){
-				//get the url for the image
-				if(agent.equals(chrome)){
-					source = image.attr("abs:data-src");
-				}
-				else{
-					source=image.attr("abs:src");
-				}
-				//download the image
-				if(source.length()>urlLength){
 
-					URL imageUrl = new URL(source);
+}
+private static void bingDownload(Elements images) throws IOException {
+	for(Element image:  images){
+		if(num>0){
+			//get the url for the image
+			source = image.attr("abs:src");
+			if (!(source.length()>urlLength)){
+				source = image.attr("abs:src2");
+			}
 
+			//download the image
+			if(source.length()>urlLength){
+				URL imageUrl = new URL(source);
+				BufferedImage img = ImageIO.read(imageUrl);
+				String check = image.attr("height");
+				if (check.length()>0){
+					Integer height =Integer.parseInt(image.attr("height"));
+					if(height>bingFilter){
+						File outputfile = new File(directoryName+"\\" +imageUrl.hashCode()+count+".png");
 
-					BufferedImage img = ImageIO.read(imageUrl);
-
-
-					File outputfile = new File(directoryName+"\\" +imageUrl.hashCode()+".png");
-					String hash = Integer.toString(imageUrl.hashCode());
-
-					if(!(listOfHashcodes.contains(hash))){
-
-						listOfHashcodes.add(hash);
 						ImageIO.write(img,"png",outputfile);
 						num--;
 						count++;
 					}
-
 				}
-			}
-			else{
-				break;
 			}
 		}
-
-	}
-	private static void bingDownload(Elements images) throws IOException {
-		for(Element image:  images){
-			if(num>0){
-				//get the url for the image
-				source = image.attr("abs:src");
-				if (!(source.length()>urlLength)){
-					source = image.attr("abs:src2");
-				}
-
-				//download the image
-				if(source.length()>urlLength){
-					URL imageUrl = new URL(source);
-					BufferedImage img = ImageIO.read(imageUrl);
-					String check = image.attr("height");
-					if (check.length()>0){
-						Integer height =Integer.parseInt(image.attr("height"));
-						if(height>bingFilter){
-							File outputfile = new File(directoryName+"\\" +imageUrl.hashCode()+count+".png");
-
-							ImageIO.write(img,"png",outputfile);
-							num--;
-							count++;
-						}
-					}
-				}
-			}
-			else{
-				break;
-			}
+		else{
+			break;
 		}
-
 	}
-	/*private static void baiduDownload(Elements images2) throws IOException {
+
+}
+/*private static void baiduDownload(Elements images2) throws IOException {
 
 		for(Element image:  images){
 			if(num>0){
@@ -490,5 +498,5 @@ public class imageDownload {
 	}*/
 
 
-	//end of class	
+//end of class	
 }
