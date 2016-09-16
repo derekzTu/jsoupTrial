@@ -9,15 +9,20 @@ import javax.swing.*;
 
 
 public class jSoupGui implements ActionListener {
-	private static final String[] elements = {"num: ","List (google, bing, imagenet, a): ","Manual Url: ","Query: " };
+
+
+	private static final String[] elements = {"Directory to save to: ","num: ",
+		"List (google, bing, imagenet, a): ","Manual Url: ","Query: " };
 	private static List<JTextField> inputLabels =  null;
 	private static JFrame frame = null;
 	private static JFrame downloadAgain = null;
-	
+
+	//main to run everything
 	public static void main(String[]args){
 		createjSoupGui();
 	}
 
+	//calls the run method
 	private static void createjSoupGui(){
 		EventQueue.invokeLater(new Runnable(){
 			@Override
@@ -27,13 +32,15 @@ public class jSoupGui implements ActionListener {
 			}
 		});
 	}
-	private jSoupGui() {
 
+	//creates the grid
+	private jSoupGui() {
+		inputLabels = new ArrayList<JTextField>();
 		frame = new JFrame("Download Manager");
 		frame.setLayout(new GridLayout(0,2));
 
+		//adds the elements
 		for(int i =0;i<elements.length;i++){
-			inputLabels = new ArrayList<JTextField>();
 			JLabel newLabel = new JLabel(elements[i]);
 			frame.add(newLabel);
 			JTextField elementToBeAdded = new JTextField();
@@ -63,44 +70,60 @@ public class jSoupGui implements ActionListener {
 		//download
 		if(e.getActionCommand().equals("download")){
 			try {
-				String num = inputLabels.get(0).getText();
-				String url = inputLabels.get(1).getText();
-				String manUrl = inputLabels.get(2).getText();
-				String query = inputLabels.get(3).getText();
-				String[] args = {num,url,manUrl,query};
+
+				//variable to send to main of imageDownload
+				String[] args = new String[inputLabels.size()];
+				for (int i =0;i<inputLabels.size();i++){
+					args[i] = inputLabels.get(i).getText();
+				}
+
+				//call the imageDownload main to start downloading
 				imageDownload.main(args);
+
+				//java gui spring cleaning
+				frame.dispose();
 				downloadAgain();
 
 			} catch (IOException | InterruptedException e1) {
 				e1.printStackTrace();
 			}
-			frame.dispose();
 		}
 
 		//cancel
 		else if(e.getActionCommand().equals("cancel")){
 			frame.dispose();
 		}
+
+		//download again
 		else if(e.getActionCommand().equals("yes")){
 			downloadAgain.dispose();
 			createjSoupGui();
 		}
+		//done downloading
 		else{
 			downloadAgain.dispose();
 			frame.dispose();
 		}
 	}
 
+	//method to creat the window that asks if want to download
 	private void downloadAgain() {
 		downloadAgain = new JFrame("Would you like to download again?");
 		downloadAgain.setLayout(new GridLayout(0,2));
-		
+
+		//labels to ask if want to download
+		JLabel label = new JLabel("Would you like to download again?");
+		JLabel yesNo = new JLabel(" Please select yes or no");
+		downloadAgain.add(label);
+		downloadAgain.add(yesNo);
+
+		//yes button
 		JButton yes = new JButton("Yes");
 		downloadAgain.add(yes);
 		yes.addActionListener(this);
 		yes.setActionCommand("yes");
 
-		//Add the cancel button
+		//no button
 		JButton no = new JButton("no");
 		downloadAgain.add(no);
 		no.addActionListener(this);
@@ -109,7 +132,7 @@ public class jSoupGui implements ActionListener {
 
 		downloadAgain.pack();
 		downloadAgain.setVisible(true);
-		
-		
+
+
 	}
 }
