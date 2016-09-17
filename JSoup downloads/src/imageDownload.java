@@ -47,6 +47,7 @@ public class imageDownload {
 	private static String baiduUrl = "http://image.baidu.com/search/index?tn=baiduimage&word=";
 	private static String baiduExtension = "&pn=";
 	 */
+
 	private static String imagenetUrl = "http://image-net.org/search?q=";
 	private static String imageNetUrlList = "http://image-net.org/api/text/imagenet.synset.geturls?wnid=";
 
@@ -96,18 +97,13 @@ public class imageDownload {
 
 
 		String choice = null;
-	/*
-		Scanner file = new Scanner(System.in);
-		//create the directory
-		createDirectory(file);
-*/
 
 		String directory = args[0];
 		num = Integer.parseInt(args[1]);
 		String manual = args[2];
 		choice = args[3];
 		String input = args[4];
-	
+
 
 		//google only possible 80
 		if(choice.equals("google")){
@@ -316,65 +312,8 @@ public class imageDownload {
 	private static void getImagenetUrl(String in) {
 		url = imagenetUrl + in;
 	}
-	/*
-	private static void getBaiduUrl(String in){
-		url = baiduUrl + in+baiduExtension+count;
-	}
-	 */
-	private static void createDirectory(Scanner file) {
-		//creates the directory
 
 
-		System.out.println("Please specify a directory to save to");
-
-		//Constantly loops until a directory is made
-		while(file.hasNextLine()){
-
-			//the name of the directory as specified by the user
-			directoryName = file.nextLine();
-			//creates it as a file//
-			File directory = new File(directoryName);
-			boolean bool = false;	
-
-			//check to see if directory already exists
-			if(!directory.exists()){
-
-				//if directory does not exist create it
-				try{
-					System.out.println("Directory made");
-					directory.mkdir();
-					bool = true;
-				}
-				catch(SecurityException se){	
-				}
-
-			}
-
-			else{
-				//if the directory exists ask them if they want to overwrite it
-				System.out.println("Directory already exists, overwrite?Y/N");
-
-				String answer = file.nextLine();
-
-
-				if(answer.equals("Y")||answer.equals("y")){
-					//overwrite the directory
-					try{
-						System.out.println("Directory made");
-						directory.mkdir();
-						bool = true;
-					}
-					catch(SecurityException se){	
-					}
-				}
-			}
-			//break out if directory has been made
-			if(bool) break;
-			//else continue until directory has been made
-			System.out.println("Please specify a directory to save to");
-
-		}
-	}
 	private static void googleDownload(Elements images) throws IOException {
 		for(Element image:images){
 			if(num>0){
